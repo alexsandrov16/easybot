@@ -1,0 +1,8 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "^7.8",
+        "monolog/monolog": "^3.6",
+        "mk4u/http": "^0.2.1",
+        "symfony/var-dumper": "^7.0"
+    }
+}
