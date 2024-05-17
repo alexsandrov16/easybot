@@ -39,7 +39,7 @@ try {
 
     $client->get("sendMessage?chat_id=$chatId&text=Este fue tu mensaje anterior
     
-".json_encode($json,JSON_PRETTY_PRINT));
+" . json_encode($json, JSON_PRETTY_PRINT));
 
     $log = new Logger('up');
     $log->pushHandler(new StreamHandler('logs/debug.log', Level::Info));

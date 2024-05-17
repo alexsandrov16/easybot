@@ -1,8 +1,27 @@
 {
+    "name": "al3x5/easybot",
+    "description": "A minimal bot",
+    "type": "library",
     "require": {
+        "php": ">=8.2",
+        "ext-curl": "*",
         "guzzlehttp/guzzle": "^7.8",
-        "monolog/monolog": "^3.6",
-        "mk4u/http": "^0.2.1",
+        "mk4u/http": "^0.2",
+        "monolog/monolog": "^3.6"
+    },
+    "require-dev": {
         "symfony/var-dumper": "^7.0"
-    }
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Al3x5\\Easybot\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "alexsandrov16",
+            "email": "al3x5.dev@gmail.com"
+        }
+    ]
 }
