@@ -3,7 +3,7 @@
 namespace Al3x5\Easybot;
 
 /**
- * undocumented class
+ * TelegramException class
  */
 class TelegramException extends \Exception
 {

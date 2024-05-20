@@ -17,12 +17,12 @@ class Api
     /** @var Client $client Instancia de GuzzleHttp\Client */
     private Client $client;
 
-    public function __construct()
+    public function __construct($token)
     {
-        
+
 
         $this->client = new Client([
-            "base_uri" => 'https://api.telegram.org/bot' . env('API_TOKEN') . '/'
+            "base_uri" => "https://api.telegram.org/bot$token/"
         ]);
     }
 
