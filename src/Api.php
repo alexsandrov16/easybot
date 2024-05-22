@@ -29,12 +29,16 @@ class Api
     {
         $update = Http::update();
 
-        if (!empty($update)) {
-            $this->sendMessage([
-                'chat_id' => $update['message']['from']['id'],
-                'text' => 'Hola ' . $update['message']['from']['first_name'] . ', este fue tu mensaje anterior...' . PHP_EOL . json_encode($update, JSON_PRETTY_PRINT)
-            ]);
+        file_put_contents('update.log', microtime().'---'.'$update=' . json_encode($update, JSON_PRETTY_PRINT), FILE_APPEND);
+
+
+        if (empty($update)) {
+            file_put_contents('error.log', 'Empty $update', FILE_APPEND);
         }
+        $this->sendMessage([
+            'chat_id' => $update['message']['from']['id'],
+            'text' => 'Hola ' . $update['message']['from']['first_name'] . ', este fue tu mensaje anterior...' . PHP_EOL . json_encode($update, JSON_PRETTY_PRINT)
+        ]);
     }
 
     public function __call($method, $params)
