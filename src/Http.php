@@ -29,7 +29,7 @@ class Http
 
             // add records to the log
             $log->error($e->getMessage());*/
-            file_put_contents('error.log', microtime().'---'.$e->getMessage(), FILE_APPEND);
+            file_put_contents('error.log', microtime() . '---' . $e->getMessage(), FILE_APPEND);
         }
     }
 
