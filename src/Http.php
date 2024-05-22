@@ -11,28 +11,16 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Http
 {
-    /**
-     * undocumented function summary
-     *
-     * Undocumented function long description
-     *
-     * @param Type $var Description
-     * @return type
-     * @throws conditon
-     **/
     public static function client($token, $uri, $options): ResponseInterface
     {
-        $client = new Client([
-            "base_uri" => "https://api.telegram.org/bot$token/"
-        ]);
-
+        $client = new Client();
 
 
         try {
             /*if ($get) {
                 return $this->client->get($path, $param);
             }*/
-            return $client->post($uri, $options);
+            return $client->post("https://api.telegram.org/bot$token/$uri", ['form_params' => $options]);
         } catch (ClientException $e) {
             /*$log = new Logger('telegram-api');
             $log->pushHandler(
@@ -42,5 +30,13 @@ class Http
             // add records to the log
             $log->error($e->getMessage());*/
         }
+    }
+
+    public static function update(): array
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            return file_get_contents('php://input', true);
+        }
+        return [];
     }
 }
