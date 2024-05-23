@@ -42,8 +42,8 @@ class Api
             file_put_contents('error.log', 'Empty $update', FILE_APPEND);
         }
         $this->sendMessage([
-            'chat_id' => 649800747,
-            'text' => 'Hola!'
+            'chat_id' => $update['message']['from']['id'],
+            'text' => 'Hola! Este es tu mensaje...'.PHP_EOL.json_encode($update,JSON_PRETTY_PRINT)
 
         ]);
     }
@@ -51,10 +51,10 @@ class Api
     public function sendMessage($params)
     {
         try {
-            $response = $this->client->get(
+            $response = $this->client->post(
                 $this->endpoint . $this->token . '/sendMessage',
                 [
-                    'query' => $params
+                    'form_params' => $params
                 ]
             );
         } catch (ClientException $e) {
