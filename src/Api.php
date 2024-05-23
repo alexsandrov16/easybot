@@ -2,7 +2,8 @@
 
 namespace Al3x5\Easybot;
 
-use Al3x5\Easybot\Exceptions\ApiExceptions;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * undocumented class
@@ -11,38 +12,53 @@ class Api
 {
     private string $token;
     private array $cmd;
+    private Client $client;
+    private string $endpoint = 'https://api.telegram.org/bot';
 
     public function __construct(array $config)
     {
         $this->token = $config['token'];
         $this->cmd = $config['commands'];
+        $this->client = new Client();
     }
 
-    public function hookUpdate(): void
+    public function update(): array
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            //Update::set(file_get_contents('php://input', false));
-        }
+        return json_decode(file_get_contents('php://input'), true);
     }
 
     public function run() //: Returntype
     {
-        $update = Http::update();
+        $update = $this->update();
 
-        file_put_contents('update.log', microtime().'---'.'$update=' . json_encode($update, JSON_PRETTY_PRINT), FILE_APPEND);
+        file_put_contents(
+            'update.log',
+            time() . '---' . '$update=' . json_encode($this->update(), JSON_PRETTY_PRINT),
+            FILE_APPEND
+        );
 
 
         if (empty($update)) {
             file_put_contents('error.log', 'Empty $update', FILE_APPEND);
         }
         $this->sendMessage([
-            'chat_id' => $update['message']['from']['id'],
-            'text' => 'Hola ' . $update['message']['from']['first_name'] . ', este fue tu mensaje anterior...' . PHP_EOL . json_encode($update, JSON_PRETTY_PRINT)
+            'chat_id' => 649800747,
+            'text' => 'Hola!'
+
         ]);
     }
 
-    public function __call($method, $params)
+    public function sendMessage($params)
     {
-        return Http::client($this->token, $method, $params);
+        try {
+            $response = $this->client->get(
+                $this->endpoint . $this->token . '/sendMessage',
+                [
+                    'query' => $params
+                ]
+            );
+        } catch (ClientException $e) {
+            file_put_contents('error.log', time() . '---' . $e->getMessage(), FILE_APPEND);
+        }
     }
 }
