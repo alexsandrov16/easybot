@@ -31,9 +31,20 @@ class Api
     {
         $update = $this->update();
 
+
+
+        if (isset($update['message'])) {
+            $update=$update['message'];
+        }
+
+        if (isset($update['callback_query'])) {
+            $update=$update['callback_query'];
+
+        }
+
         file_put_contents(
             'update.log',
-            time() . '---' . '$update=' . json_encode($this->update(), JSON_PRETTY_PRINT),
+            time() . '---' . '$update=' . json_encode($update, JSON_PRETTY_PRINT),
             FILE_APPEND
         );
 
@@ -42,23 +53,31 @@ class Api
             file_put_contents('error.log', 'Empty $update', FILE_APPEND);
         }
         $this->sendMessage([
-            'chat_id' => $update['message']['from']['id'],
-            'text' => 'Hola! Este es tu mensaje...'.PHP_EOL.json_encode($update,JSON_PRETTY_PRINT)
+            'chat_id' => $update['from']['id'],
+            'text' => '😉 Hola! Este es tu mensaje... 📨👇'.PHP_EOL.json_encode($update,JSON_PRETTY_PRINT)
 
         ]);
     }
 
-    public function sendMessage($params)
+    public function __call($name, array $params)
     {
         try {
             $response = $this->client->post(
-                $this->endpoint . $this->token . '/sendMessage',
+                $this->endpoint . $this->token . "/$name",
                 [
-                    'form_params' => $params
+                    'form_params' => $params[0]
                 ]
             );
+
+            if ($response->getStatusCode()===200) {
+                if ($name!=='sendMessage') {
+                    return $response->getBody();
+                }
+            }
+
+
         } catch (ClientException $e) {
-            file_put_contents('error.log', time() . '---' . $e->getMessage(), FILE_APPEND);
+            file_put_contents('error.log', time() . '-' . $e->getMessage(), FILE_APPEND);
         }
     }
 }
