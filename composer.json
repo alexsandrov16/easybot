@@ -13,7 +13,10 @@
     "autoload": {
         "psr-4": {
             "Al3x5\\Easybot\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {

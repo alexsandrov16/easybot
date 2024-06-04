@@ -3,41 +3,18 @@
 namespace Al3x5\Easybot;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
+//use GuzzleHttp\Exception\ClientException;
 
 /**
  * Api Class
  */
 class Api
 {
-    private string $token;
-    private array $cmd;
     private Client $client;
-    private string $endpoint = 'https://api.telegram.org/bot';
-    private array $apiMethod = [
-        'getMe',
-        'setWebhook',
-        'deleteWebhook',
-        'getWebhookInfo',
 
-
-        'sendMessage',
-        'forwardMessage',
-        'forwardMessages',
-        ' copyMessage',
-        'sendPhoto',
-        'sendAudio',
-        'sendDocument',
-        'sendVideo',
-        'sendAnimation',
-        'sendPoll',
-        'sendDice',
-    ];
-
-    public function __construct(array $config)
+    public function __construct(array $cfg)
     {
-        $this->token = $config['token'];
-        $this->cmd = $config['commands'];
+        new Config($cfg);
         $this->client = new Client();
     }
 
@@ -100,7 +77,13 @@ class Api
 
     public function __call($name, array $params)
     {
-        if (!$this->hasMethod($name)) {
+
+        $method = new Method($name, $params[0] ?? []);
+        $method->execute($this->client);
+
+
+
+        /*if (!$this->hasMethod($name)) {
             throw new \InvalidArgumentException();
             
         }
@@ -119,11 +102,6 @@ class Api
             }
         } catch (ClientException $e) {
             file_put_contents('error.log', time() . '-' . $e->getMessage(), FILE_APPEND);
-        }
-    }
-
-    public function hasMethod(string $name): bool
-    {
-        return in_array($name, $this->apiMethod);
+        }*/
     }
 }
