@@ -41,7 +41,7 @@ if (!function_exists('configr')) {
     }
 }
 
-if (function_exists('env')) {
+if (!function_exists('env')) {
     /**
      * 
      */

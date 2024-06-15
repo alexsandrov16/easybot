@@ -1,8 +1,6 @@
 /vendor/
 composer.lock
 index.php
-/src/Entities/
-/src/Exceptions/
 /src/Interfaces/
 *.json
 *.log

@@ -15,9 +15,7 @@ class Method
         'getMe',
         'setWebhook',
         'deleteWebhook',
-        'getWebhookInfo',
-
-
+        'getWebhookInfo',//Informativos
         'sendMessage',
         'forwardMessage',
         'forwardMessages',
@@ -35,12 +33,13 @@ class Method
 
     public function __construct(private string $method, private array $params)
     {
-        if ($this->has($method)) {
-            $this->method = $method;
-            $this->params = $params;
-        }
 
-        throw new ApiException("Error metodo api no encontrado");
+        if ($this->has($method)==false) {
+            throw new ApiException("Error metodo '$method' no encontrado");
+        }
+        
+        $this->method = $method;
+        $this->params = $params;
         
     }
 
@@ -53,16 +52,16 @@ class Method
     {
         try {
             $response = $client->post(
-                env('endpoint') . "/$this->method",
+                env('endpoint') . $this->method,
                 [
-                    'form_params' => $params[0] ?? []
+                    'form_params' => $this->params
                 ]
             );
 
             if ($response->getStatusCode() === 200) {
-                if ($this->method !== 'sendMessage') {
+                //if ($this->method !== 'sendMessage') {
                     return $response->getBody();
-                }
+                //}
             }
         } catch (ClientException $e) {
             file_put_contents('error.log', time() . '-' . $e->getMessage(), FILE_APPEND);

@@ -66,6 +66,8 @@ class Api
             ]
         ];*/
 
+        dd($update);
+
         $this->sendMessage([
             'chat_id' => $update['from']['id'],
             'text' => '😉 Hola! Este es tu mensaje... 📨👇' . PHP_EOL . json_encode($update, JSON_PRETTY_PRINT),
@@ -77,9 +79,8 @@ class Api
 
     public function __call($name, array $params)
     {
-
         $method = new Method($name, $params[0] ?? []);
-        $method->execute($this->client);
+        return $method->execute($this->client);
 
 
 
