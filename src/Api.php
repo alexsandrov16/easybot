@@ -2,6 +2,7 @@
 
 namespace Al3x5\Easybot;
 
+use Al3x5\Easybot\Exceptions\ExceptionHandler;
 use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\ClientException;
 
@@ -16,6 +17,8 @@ class Api
     {
         new Config($cfg);
         $this->client = new Client();
+
+        ExceptionHandler::start();
     }
 
     public function update(): array

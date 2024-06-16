@@ -36,7 +36,7 @@ class Config
             'webhook' => $cfg['webhook'] ?? [],
             'poll' => $cfg['poll'] ?? [],
             'handlers' => $cfg['handlers'] ?? null,*/
-            'logs' => 'path/to/logs'
+            'logs' => rtrim($cfg['logs'],'/').'/'
         ];
 
 
