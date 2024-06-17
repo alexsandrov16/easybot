@@ -2,11 +2,6 @@
 
 namespace Al3x5\Easybot\Exceptions;
 
-use Monolog\Formatter\JsonFormatter;
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
-
 /**
  * Exception Handler Class
  */
@@ -45,9 +40,13 @@ class ExceptionHandler
     /**
      * Manejador de excepciones
      */
-    public function exceptionHandler(\Throwable $exception): void
+    public function exceptionHandler(\Throwable $e): void
     {
-        $this->logs($exception);
+        logging(
+            'easybot',
+            env('logs') . date('Ymd') . '.log',
+            $e->getMessage().' | '.$e->getTraceAsString()
+        );
     }
 
     /**
@@ -84,25 +83,5 @@ class ExceptionHandler
                 );
             }
         }
-    }
-
-
-    private function logs(\Throwable $e): void
-    {
-        // implementar para q no registre los errores 404
-        if (env('logs')/* && !in_array($statusCode, $this->config->ignoreCodes, true)*/) {
-            //implementar logs function
-            /*log_message('critical', $exception->getMessage() . "\n{trace}", [
-                'trace' => $exception->getTraceAsString(),
-            ]);*/
-        }
-
-        $logger = new Logger("easybot");
-
-        $stream_handler = new StreamHandler(env('logs').date('Ymd').'.log');
-        //$stream_handler->setFormatter(new JsonFormatter());
-        $logger->pushHandler($stream_handler);
-
-        $logger->error($e->getMessage(), [$e->getTrace()]);
     }
 }

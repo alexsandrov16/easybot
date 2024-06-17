@@ -64,7 +64,11 @@ class Method
                 //}
             }
         } catch (ClientException $e) {
-            file_put_contents('error.log', time() . '-' . $e->getMessage(), FILE_APPEND);
+            logging(
+                'TelegramApi',
+                get_class($e),
+                $e->getMessage().''.$e->getTraceAsString()
+            );
         }
     }
 }

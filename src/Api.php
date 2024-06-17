@@ -4,6 +4,8 @@ namespace Al3x5\Easybot;
 
 use Al3x5\Easybot\Exceptions\ExceptionHandler;
 use GuzzleHttp\Client;
+use Mk4U\Http\Request;
+
 //use GuzzleHttp\Exception\ClientException;
 
 /**
@@ -23,13 +25,16 @@ class Api
 
     public function update(): array
     {
-        return json_decode(file_get_contents('php://input'), true);
+        return (new Request)->jsonData();
     }
 
-    public function run() //: Returntype
+    public function run()
     {
         $update = $this->update();
 
+        if (env('dev')) {
+            logging('dev', env('logs') . 'update.log', json_encode($update));
+        }
 
 
         if (isset($update['message'])) {
@@ -40,11 +45,11 @@ class Api
             $update = $update['callback_query'];
         }
 
-        file_put_contents(
+        /*file_put_contents(
             'update.log',
             time() . '---' . '$update=' . json_encode($update, JSON_PRETTY_PRINT),
             FILE_APPEND
-        );
+        );*/
 
 
         if (empty($update)) {
@@ -69,7 +74,7 @@ class Api
             ]
         ];*/
 
-        dd($update);
+        //dd($update);
 
         $this->sendMessage([
             'chat_id' => $update['from']['id'],

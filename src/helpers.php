@@ -1,52 +1,37 @@
 <?php
 
-use Al3x5\Easybot\Exceptions\ApiException;
-
-/**
- * @DREPECADE
- */
-if (!function_exists('configr')) {
-    /**
-     * Establecer variable de entorno para la configuracion
-     * 
-     * Ej: [
-     *      'token' => '',
-     *      'name'=>'',
-     *      'endpoint' => 'https://api.telegram.org/bot{TOKEN}/',
-     *      'handlers' => [
-     *          'commands' => [],
-     *          'callbacks' => [],
-     *          'buttons_response' => []
-     *      ],
-     *      'logs' => 'path/logs/'
-     * ]
-     */
-    function configr(array $cfg): void
-    {
-        $_ENV['token'] = $cfg['token'] ?? throw new ApiException("Token del bot no especificado");
-        $_ENV['endpoint'] = $cfg['endpoint'] ?? 'https://api.telegram.org/bot{TOKEN}/';
-
-        if (isset($cfg['handlers'])) {
-            if (!is_array($cfg['handlers'])) {
-                throw new ApiException("El handler parametro debe ser un array");
-            }
-            foreach (['commands', 'callbacks', 'texts'] as $value) {
-                if (!in_array($value, $cfg['handlers'])) {
-                    $cfg['handlers'][$value] = [];
-                }
-            }
-        }
-
-        $_ENV = $cfg;
-    }
-}
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 if (!function_exists('env')) {
     /**
-     * 
+     * Obtiene Variables de entorno
      */
     function env(string $name, mixed $default = null): mixed
     {
         return $_ENV[$name] ?? $default;
+    }
+}
+
+if (!function_exists('logging')) {
+    /**
+     * Establece archivos de registro
+     */
+    function logging(
+        string $name,
+        string $filename,
+        string $message,
+        array $context = []
+    ): void {
+        $logger = new Logger($name);
+        $stream_handler = new StreamHandler($filename);
+
+        if (env('dev') && preg_match('/^dev/', $name)) {
+            $stream_handler->setFormatter(new JsonFormatter());
+        }
+
+        $logger->pushHandler($stream_handler);
+        $logger->debug($message, $context);
     }
 }
