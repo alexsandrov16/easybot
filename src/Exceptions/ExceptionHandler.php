@@ -43,9 +43,13 @@ class ExceptionHandler
     public function exceptionHandler(\Throwable $e): void
     {
         logging(
-            'easybot',
+            get_class($e),
             env('logs') . date('Ymd') . '.log',
-            $e->getMessage().' | '.$e->getTraceAsString()
+            $e->getMessage() . ' | ' . $e->getTraceAsString(),
+            [
+                'file'=>$e->getFile(),
+                'line'=>$e->getLine(),
+            ]
         );
     }
 
