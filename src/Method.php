@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
 /**
- * undocumented class
+ * Telegram Api Methods Class
  */
 class Method
 {
@@ -19,7 +19,7 @@ class Method
         'sendMessage',
         'forwardMessage',
         'forwardMessages',
-        ' copyMessage',
+        'copyMessage',
         'sendPhoto',
         'sendAudio',
         'sendDocument',
@@ -33,7 +33,6 @@ class Method
 
     public function __construct(private string $method, private array $params)
     {
-
         if ($this->has($method)==false) {
             throw new ApiException("Error metodo '$method' no encontrado");
         }
@@ -59,9 +58,9 @@ class Method
             );
 
             if ($response->getStatusCode() === 200) {
-                //if ($this->method !== 'sendMessage') {
+                if ($this->method !== 'sendMessage') {
                     return $response->getBody();
-                //}
+                }
             }
         } catch (ClientException $e) {
             logging(
