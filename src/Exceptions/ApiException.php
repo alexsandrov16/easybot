@@ -3,7 +3,7 @@
 namespace Al3x5\Easybot\Exceptions;
 
 /**
- * undocumented class
+ * ApiException Class
  */
 class ApiException extends \Exception
 {
