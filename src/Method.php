@@ -65,8 +65,9 @@ class Method
         } catch (ClientException $e) {
             logging(
                 'TelegramApi',
-                get_class($e),
-                $e->getMessage().''.$e->getTraceAsString()
+                env('logs').get_class($e),
+                $e->getMessage().''.$e->getTraceAsString(),
+                ['code'=>$e->getCode()]
             );
         }
     }
