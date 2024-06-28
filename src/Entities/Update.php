@@ -2,6 +2,8 @@
 
 namespace Al3x5\Easybot\Entities;
 
+use Al3x5\Easybot\Exceptions\ApiException;
+
 /**
  * undocumented class
  * 
@@ -51,28 +53,54 @@ namespace Al3x5\Easybot\Entities;
  * 
  * removed_chat_boost 	ChatBoostRemoved 	Opcional . Se eliminó un impulso de un chat. El bot debe ser administrador en el chat para recibir estas actualizaciones. 
  */
-class Update extends Entity
+abstract class Update
 {
     private int $update_id;
     private Message $message;
-    private Message $edited_message;
+    /*private Message $edited_message;
     private Message $channel_post;
     private Message $edited_channel_post;
-    private BusinessConnection $business_connection;
+    //private BusinessConnection $business_connection;
     private Message $edited_business_message;
-    private Message $deleted_business_messages;
-    private BusinessMessagesDeleted $message_reaction;
-    private MessageReactionUpdated $message_reaction_count;
-    private MessageReactionCountUpdated $inline_query;
-    private InlineQuery $chosen_inline_result;
-    private CallbackQuery $callback_query;
-    private ShippingQuery $shipping_query;
-    private PreCheckoutQuery $pre_checkout_query;
-    private Poll $poll;
-    private PollAnswer $poll_answer;
-    private ChatMemberUpdated $my_chat_member;
-    private ChatMemberUpdated $chat_member;
-    private ChatJoinRequest $chat_join_request;
-    private ChatBoostUpdated $chat_boost;
-    private ChatBoostRemoved $removed_chat_boost;
+    private Message $deleted_business_messages;*/
+    //private BusinessMessagesDeleted $message_reaction;
+    //private MessageReactionUpdated $message_reaction_count;
+    //private MessageReactionCountUpdated $inline_query;
+    //private InlineQuery $chosen_inline_result;
+    #private CallbackQuery $callback_query;
+    //private ShippingQuery $shipping_query;
+    //private PreCheckoutQuery $pre_checkout_query;
+    //private Poll $poll;
+    //private PollAnswer $poll_answer;
+    //private ChatMemberUpdated $my_chat_member;
+    //private ChatMemberUpdated $chat_member;
+    //private ChatJoinRequest $chat_join_request;
+    //private ChatBoostUpdated $chat_boost;
+    //private ChatBoostRemoved $removed_chat_boost;
+
+    public function __construct(array $data)
+    {
+        if (empty($data)) {
+            throw new ApiException("¡Update vacío! El webhook no debe ser llamado manualmente, sólo por Telegram.");
+        }
+
+        if (env('dev')) {
+            logging('development', env('logs') . 'update.log', json_encode($data));
+        }
+
+        foreach ($data as $key => $value) {
+            if (property_exists($this,$key)) {
+                
+                if (is_object($this->$key)) {
+                    # code...
+                }
+                
+            }
+        }
+
+        match ($data) {
+            'update_id' => $data['update_id'],
+            'message' => $data['message'],
+        };
+    }
 }
