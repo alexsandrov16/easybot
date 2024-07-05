@@ -37,7 +37,7 @@ class Config
             'poll' => $cfg['poll'] ?? [],
             'handlers' => $cfg['handlers'] ?? null,*/
             'dev' => $cfg['dev'] ?? false,
-            'logs' => rtrim($cfg['logs'], '/') . '/'
+            'logs' => !empty($cfg['logs'])?rtrim($cfg['logs'], '/') . '/': dirname(__DIR__,2)
         ];
 
 
