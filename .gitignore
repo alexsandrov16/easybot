@@ -2,5 +2,6 @@
 composer.lock
 index.php
 /src/Interfaces/
+logs/
 *.json
 *.log
