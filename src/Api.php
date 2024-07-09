@@ -36,6 +36,14 @@ class Api
         $this->update = //new Update(
             (new Request)->jsonData(true)
         /*)*/;
+
+        if (empty($data)) {
+            throw new ApiException("¡Update vacío! El webhook no debe ser llamado manualmente, sólo por Telegram.");
+        }
+
+        if (env('dev')) {
+            logging('development', env('logs') . 'update.log', json_encode($data));
+        }
     }
 
     public function run()

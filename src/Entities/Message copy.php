@@ -3,21 +3,28 @@
 namespace Al3x5\Easybot\Entities;
 
 /**
- * Message Entity
- */
-class Message extends Base
-{
-    protected function getEntities(): array
-    {
-        return [
-            'from' => User::class,
-            /*'sender_chat'=> Chat::class,
-            'sender_business_bot'=>User::class,
-            'chat'=>Chat::class,
-            'forward_origin'=>MessageOrigin::class
-            
-
-            /*is_topic_message 	True 	Optional. True, if the message is sent to a forum topic
+ * undocumented class
+ * 
+ * message_id 	Integer 	Unique message identifier inside this chat
+ * 
+ * message_thread_id 	Integer 	Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
+ * 
+ * from 	User 	Optional. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+ * 
+ * sender_chat 	Chat 	Optional. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+ * 
+ * sender_boost_count 	Integer 	Optional. If the sender of the message boosted the chat, the number of boosts added by the user
+ * 
+ * sender_business_bot 	User 	Optional. The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
+ * 
+ * date 	Integer 	Date the message was sent in Unix time. It is always a positive number, representing a valid date.
+ * 
+ * business_connection_id 	String 	Optional. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
+ * 
+ * chat 	Chat 	Chat the message belongs to
+ * 
+ * forward_origin 	MessageOrigin 	Optional. Information about the original message for forwarded messages
+is_topic_message 	True 	Optional. True, if the message is sent to a forum topic
 is_automatic_forward 	True 	Optional. True, if the message is a channel post that was automatically forwarded to the connected discussion group
 reply_to_message 	Message 	Optional. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
 external_reply 	ExternalReplyInfo 	Optional. Information about the message that is being replied to, which may come from another chat or forum topic
@@ -89,7 +96,9 @@ video_chat_started 	VideoChatStarted 	Optional. Service message: video chat star
 video_chat_ended 	VideoChatEnded 	Optional. Service message: video chat ended
 video_chat_participants_invited 	VideoChatParticipantsInvited 	Optional. Service message: new participants invited to a video chat
 web_app_data 	WebAppData 	Optional. Service message: data sent by a Web App
-reply_markup 	InlineKeyboardMarkup 	Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.*/
-        ];
-    }
+reply_markup 	InlineKeyboardMarkup 	Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
+ */
+class Message extends Entity
+{
+    
 }
