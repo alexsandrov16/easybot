@@ -2,8 +2,6 @@
 
 namespace Al3x5\Easybot\Entities;
 
-use Al3x5\Easybot\Entities\Interfaces\EntityInterface;
-
 /**
  * Base Class
  */
@@ -14,14 +12,8 @@ abstract class Base
     public function __construct(array $data)
     {
         $this->entityMap=$this->getEntities();
-        $this->init($data);
-    }
-
-    /**
-     * 
-     */
-    private function init(array $data): void
-    {
+        
+        
         foreach ($data as $key => $value) {
             if (key_exists($key,$this->getEntities())) {
                 $this->$key = $this->createEntity($key, $value);

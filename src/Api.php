@@ -15,7 +15,7 @@ class Api
 {
     private Client $client;
 
-    private /*Update */ $update;
+    private Update $update;
 
     /**
      * Inicializa el bot
@@ -33,9 +33,7 @@ class Api
      */
     public function getUpdate(): void
     {
-        $this->update = //new Update(
-            (new Request)->jsonData(true)
-        /*)*/;
+        $data = (new Request)->jsonData(true);
 
         if (empty($data)) {
             throw new ApiException("¡Update vacío! El webhook no debe ser llamado manualmente, sólo por Telegram.");
@@ -44,13 +42,18 @@ class Api
         if (env('dev')) {
             logging('development', env('logs') . 'update.log', json_encode($data));
         }
+
+        $this->update = new Update($data);
     }
 
     public function run()
     {
         $this->getUpdate();
-        logging('UpdateTest', env('logs') . 'updObj.log', json_encode($this->update));
 
+        return match ($this->update->type()) {
+            'message' => $this->message(),
+            'callback_query' => $this->callback(),
+        };
 
 
         /*
@@ -62,7 +65,7 @@ class Api
         }*/
 
         //Teclado simple
-        $keyboard = [
+        /*$keyboard = [
             'keyboard' => [
                 ['👤 Perfil', '🏦 Banca', '🎮 Jugar'],
                 ['⚙️ Más opciones']
@@ -138,5 +141,46 @@ if ($this->update->hasUpdate()) {
     {
         $method = new Method($name, $params[0] ?? []);
         return $method->execute($this->client);
+    }
+
+    public function message() //: Returntype
+    {
+        $message= $this->update->message;
+
+        $inline = [
+            'inline_keyboard' => [
+                [ // Primera fila
+                    ['text' => 'Opción 1', 'callback_data' => 'opcion1'],
+                    ['text' => 'Opción 2', 'callback_data' => 'opcion2']
+                ],
+                [ // Segunda fila
+                    ['text' => 'Opción 3', 'callback_data' => 'opcion3']
+                ]
+            ]
+        ];
+
+        return $this->sendMessage([
+            'chat_id' => $message->from->id,
+            //'text' => '😉 Hola! Este es tu mensaje de texto' . PHP_EOL . json_encode($this->update, JSON_PRETTY_PRINT),
+            'text'=>'Hola tu mensaje fue '.$message->text,
+            'reply_markup' => json_encode($inline)
+
+
+        ]);
+
+
+    }
+
+    public function callback() //: Returntype
+    {
+        $callback= $this->update->callback_query;
+
+        return $this->editMessageText([
+            'chat_id' => $callback->from->id,
+            'message_id' => $callback->message->message_id,
+            //'text' => '😉 Hola! Este es tu mensaje de texto' . PHP_EOL . json_encode($callback->message, JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL.'Opcion '.$callback->data,
+            'text'=>'Precionaste la opcion '.$callback->data
+            
+        ]);
     }
 }

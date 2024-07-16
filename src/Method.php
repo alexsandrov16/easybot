@@ -15,7 +15,7 @@ class Method
         'getMe',
         'setWebhook',
         'deleteWebhook',
-        'getWebhookInfo',//Informativos
+        'getWebhookInfo', //Informativos
         'sendMessage',
         'forwardMessage',
         'forwardMessages',
@@ -27,19 +27,20 @@ class Method
         'sendAnimation',
         'sendPoll',
         'sendDice',
+
+        'editMessageText'
     ];
 
     //private
 
     public function __construct(private string $method, private array $params)
     {
-        if ($this->has($method)==false) {
+        if ($this->has($method) == false) {
             throw new ApiException("Error metodo '$method' no encontrado");
         }
-        
+
         $this->method = $method;
         $this->params = $params;
-        
     }
 
     public function has(string $name): bool
@@ -59,16 +60,32 @@ class Method
 
             if ($response->getStatusCode() === 200) {
                 if ($this->method !== 'sendMessage') {
-                    return $response->getBody();
+                    $result = json_decode($response->getBody(), true);
+                    return match ($this->method) {
+                        'getMe' => $this->printCLi($result['result']),
+                        'setWebhook' =>$result['description'].PHP_EOL,
+                        'deleteWebhook' => $result['description'].PHP_EOL,
+                        'getWebhookInfo' => $this->printCLi($result['result']),
+                        default=>json_encode($result).PHP_EOL
+                    };
                 }
             }
         } catch (ClientException $e) {
             logging(
                 'TelegramApi',
-                env('logs').get_class($e),
-                $e->getMessage().''.$e->getTraceAsString(),
-                ['code'=>$e->getCode()]
+                env('logs') . get_class($e),
+                $e->getMessage() . '' . $e->getTraceAsString(),
+                ['code' => $e->getCode()]
             );
         }
+    }
+
+    public function printCLi(array $data): string
+    {
+        $output='';
+        foreach ($data as $key => $value) {
+            $output .= "$key: $value" . PHP_EOL;
+        }
+        return $output;
     }
 }

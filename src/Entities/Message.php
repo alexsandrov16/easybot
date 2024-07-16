@@ -92,4 +92,11 @@ web_app_data 	WebAppData 	Optional. Service message: data sent by a Web App
 reply_markup 	InlineKeyboardMarkup 	Optional. Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.*/
         ];
     }
+
+    public function isCommand(): bool
+    {
+        if (!isset($this->entities)) {
+            return $this->entities->type == 'bot_command';
+        }
+    }
 }

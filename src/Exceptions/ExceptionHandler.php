@@ -56,7 +56,7 @@ class ExceptionHandler
     /**
      * Manejador de errores
      */
-    private function errorHandler(
+    public function errorHandler(
         int $severity,
         string $message,
         string $file = null,
