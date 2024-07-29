@@ -9,8 +9,6 @@ class User extends Base
 {
     protected function getEntities(): array
     {
-        return [
-            
-        ];
+        return [];
     }
 }
