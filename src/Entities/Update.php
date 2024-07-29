@@ -14,9 +14,8 @@ class Update extends Base
             'edited_message'       => Message::class,
             'channel_post'         => Message::class,
             'edited_channel_post'  => Message::class,
-            //'chosen_inline_result' => InlineQuery::class,
+            'chosen_inline_result' => InlineQuery::class,
             'callback_query'       => CallbackQuery::class,
-            //'chosen_inline_result' => InlineQuery::class,
 
             //private ChatMemberUpdated $my_chat_member;
             //private ChatMemberUpdated $chat_member;
@@ -24,6 +23,9 @@ class Update extends Base
         ];
     }
 
+    /**
+     * Tipo de Actualizacion
+     */
     public function type(): ?string
     {
         foreach ($this->getEntities() as $key => $value) {
