@@ -5,20 +5,31 @@ namespace Al3x5\Easybot\Entities;
 /**
  * Base Class
  */
-abstract class Base 
+abstract class Base
 {
     protected array $entityMap = [];
 
     public function __construct(array $data)
     {
-        $this->entityMap=$this->getEntities();
-        
-        
+        $this->entityMap = $this->getEntities();
+
+        $this->resolve($data);
+    }
+
+    /**
+     * Resuelve las entidades y propiedades devueltas en la ai de telegram
+     */
+    protected function resolve(array $data) : void
+    {
         foreach ($data as $key => $value) {
-            if (key_exists($key,$this->getEntities())) {
+            if (key_exists($key, $this->getEntities())) {
                 $this->$key = $this->createEntity($key, $value);
             } else {
-                $this->$key = $value;
+                if (is_array($value)) {
+                    $this->resolve($value);
+                } else {
+                    $this->$key = $value;
+                }
             }
         }
     }
@@ -29,6 +40,11 @@ abstract class Base
     protected function createEntity(string $class, array $params): object
     {
         return new $this->entityMap[$class]($params);
+    }
+
+    public function get(string $property): mixed
+    {
+        return $this->$property;
     }
 
     /**
