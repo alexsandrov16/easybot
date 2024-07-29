@@ -28,7 +28,9 @@ class Method
         'sendPoll',
         'sendDice',
 
-        'editMessageText'
+        'editMessageText',
+
+        'sendChatAction',//Estado
     ];
 
     //private
