@@ -1,6 +1,7 @@
 /vendor/
 composer.lock
 index.php
+cli.php
 /src/Interfaces/
 logs/
 *.json
