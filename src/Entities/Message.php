@@ -11,9 +11,10 @@ class Message extends Base
     {
         return [
             'from' => User::class,
+            'chat' => Chat::class,
+            'entities' => MessageEntity::class,
             /*'sender_chat'=> Chat::class,
             'sender_business_bot'=>User::class,
-            'chat'=>Chat::class,
             'forward_origin'=>MessageOrigin::class
             
 
@@ -95,8 +96,9 @@ reply_markup 	InlineKeyboardMarkup 	Optional. Inline keyboard attached to the me
 
     public function isCommand(): bool
     {
-        if (!isset($this->entities)) {
-            return $this->entities->type == 'bot_command';
-        }
+        if (isset($this->entities)) {
+            return $this->entities->get('type') == 'bot_command';
+        } 
+        return false;
     }
 }
